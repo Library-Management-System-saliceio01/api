@@ -1,0 +1,1 @@
+export interface IFormatResponse { headers?: any, statusCode: number, body: string }
