@@ -1,5 +1,5 @@
 import type { AWS } from "@serverless/typescript";
-import { proxyHandlers } from './src/functions/proxy/routes/routes';
+import { proxyHandlers } from './src/functions/proxy/index';
 
 const serverlessConfiguration: AWS = {
   service: "serverless",

@@ -1,5 +1,5 @@
 {
-  "name": "Technical Challenge",
+  "name": "technical_challenge",
   "version": "1.0.0",
   "description": "Technical Challenge: Building a Library Management System",
   "main": "serverless.ts",
