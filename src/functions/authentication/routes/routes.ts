@@ -12,12 +12,6 @@ export const authenticationRoutes: IRouteGateway<User>[] = [
         hasParameters: false,
         func: currentUserHandler,
     },
-    {
-        path: `${baseRoute}/register`,
-        method: EHttpMethod.POST,
-        hasParameters: false,
-        func: registerHandler
-    }
 ];
 
 export const authenticationRoutesWithoutAuth: IRouteGateway<User>[] = [
@@ -27,4 +21,10 @@ export const authenticationRoutesWithoutAuth: IRouteGateway<User>[] = [
         hasParameters: false,
         func: loginHandler,
     },
+    {
+        path: `${baseRoute}/register`,
+        method: EHttpMethod.POST,
+        hasParameters: false,
+        func: registerHandler
+    }
 ];

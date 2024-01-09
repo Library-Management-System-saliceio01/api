@@ -12,9 +12,17 @@ const request = async (event: ILambdaEvent<User>): Promise<IFormatResponse> => {
         }, 400)
     }
 
+    let user = null
+
     const pwdService = new PasswordService(username, password)
 
-    const user = await pwdService.getUser()
+    try {
+        user = await pwdService.getUser()
+    } catch (error) {
+        return formatJSONResponse({
+            error: 'User not found'
+        }, 404)
+    }
 
     if (!user) {
         return formatJSONResponse({
@@ -24,7 +32,7 @@ const request = async (event: ILambdaEvent<User>): Promise<IFormatResponse> => {
 
     const isPasswordValid = await pwdService.checkPassword()
 
-    if (!(isPasswordValid)) {
+    if (!isPasswordValid) {
         return formatJSONResponse({
             error: 'Invalid credentials'
         }, 401)

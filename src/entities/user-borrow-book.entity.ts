@@ -7,9 +7,11 @@ export class UserBorrowBook {
     constructor(
         user: User,
         book: Book,
+        expirationDate: Date,
     ) {
         this.user = user
         this.book = book
+        this.expirationDate = expirationDate
     }
 
     @PrimaryGeneratedColumn('uuid')
@@ -17,6 +19,9 @@ export class UserBorrowBook {
 
     @Column({ type: 'boolean', default: false })
     returned: boolean
+
+    @Column({ type: 'datetime' })
+    expirationDate: Date
 
     @ManyToOne(() => User, user => user.userBorrowBook)
     user: User

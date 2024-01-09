@@ -6,12 +6,6 @@ import { formatJSONResponse } from "@/utils";
 const request = async (event: ILambdaEvent<User>): Promise<IFormatResponse> => {
     const { title, author, genre, page, size } = event.queryStringParameters
 
-    if (!title && !author && !genre) {
-        return formatJSONResponse({
-            message: "Please provide at least one search parameter"
-        }, 400)
-    }
-
     try {
         const books = await BookService.findBooks({
             title,

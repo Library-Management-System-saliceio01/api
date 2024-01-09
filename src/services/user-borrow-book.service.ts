@@ -1,6 +1,7 @@
 import { Book, User, UserBorrowBook } from "@/entities";
 import { userBorrowBookRepository } from "@/utils";
 import { BookService } from "./book.service";
+import moment from "moment";
 
 export class UserBorrowBookService {
     static userBorrowBookRepository = userBorrowBookRepository
@@ -10,7 +11,8 @@ export class UserBorrowBookService {
 
         await BookService.updateBook(data.book)
 
-        return await this.userBorrowBookRepository.save(data)
+        //Expiration time is 1 week
+        return await this.userBorrowBookRepository.save({ ...data, expirationDate: moment().add(1, 'weeks').toDate() })
     }
 
     static async returnBook(book: Book): Promise<UserBorrowBook> {
@@ -30,8 +32,8 @@ export class UserBorrowBookService {
             where: {
                 book: {
                     id: book.id,
-                    isBorrowed: true
-                }
+                },
+                returned: false,
             }
         })
     }

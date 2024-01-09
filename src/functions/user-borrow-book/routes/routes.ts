@@ -17,7 +17,7 @@ export const userBorrowBookRoutes: IRouteGateway<User>[] = [
         path: `${baseRoute}/return-book`,
         method: EHttpMethod.GET,
         hasParameters: true,
-        roles: [UserRoles.member],
+        roles: [UserRoles.librarian],
         func: returnBookHandler,
     }
 ]

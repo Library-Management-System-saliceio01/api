@@ -1,6 +1,6 @@
 import { Book } from "@/entities";
 import { bookRepository } from "@/utils";
-import { DeleteResult, FindManyOptions } from "typeorm";
+import { DeleteResult, FindManyOptions, Like } from "typeorm";
 
 export class BookService {
     static bookRepository = bookRepository
@@ -45,13 +45,33 @@ export class BookService {
             }
         }
 
-        findOptions = {
-            ...findOptions,
-            where: {
-                title: title || undefined,
-                author: author || undefined,
-                genre: genre || undefined,
-            },
+        if (title) {
+            findOptions = {
+                ...findOptions,
+                where: {
+                    title: Like(title),
+                },
+            }
+        }
+
+        if (author) {
+            findOptions = {
+                ...findOptions,
+                where: {
+                    ...findOptions.where,
+                    author: Like(author),
+                },
+            }
+        }
+
+        if (genre) {
+            findOptions = {
+                ...findOptions,
+                where: {
+                    ...findOptions.where,
+                    genre: Like(genre),
+                },
+            }
         }
 
         return {

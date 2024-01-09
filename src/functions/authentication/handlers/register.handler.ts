@@ -1,4 +1,5 @@
 import { User } from "@/entities";
+import { UserRoles } from "@/enum";
 import { IFormatResponse, ILambdaEvent } from "@/interface";
 import { UserService } from "@/services";
 import { formatJSONResponse } from "@/utils";
@@ -16,10 +17,20 @@ const request = async (event: ILambdaEvent<User>): Promise<IFormatResponse> => {
         name = null
     }
 
-    const userEntity = new User(name, username, password, role)
+    if (role != UserRoles.member && role != UserRoles.librarian) {
+        return formatJSONResponse({
+            error: 'The role must be member or librarian'
+        })
+    }
+
+    const userEntity = new User(username, password, role, name)
 
     try {
-        const newUser = await UserService.createUser(userEntity)
+        const userService = new UserService(password)
+
+        userService.hashPassword()
+
+        const newUser = await userService.createUser(userEntity)
 
         return formatJSONResponse({
             data: newUser,

@@ -3,18 +3,21 @@ import middy from "@middy/core";
 import { APIGatewayProxyResult } from "aws-lambda";
 import { formatJSONResponse } from "@/utils/api-gateway";
 import { JwtService, UserService } from "@/services";
+import { User } from "@/entities";
 
 export function populateUserMiddleware<T>(): middy.MiddlewareObj<ILambdaEvent<T>, APIGatewayProxyResult> {
     return {
         before: async ({ event }) => {
+            let user: User = null
+
             const tokenData = JwtService.getTokenData(event.headers.Authorization)
 
-            const user = await UserService.getUser(tokenData.id)
-
-            if (!user) {
+            try {
+                user = await UserService.getUser(tokenData.id)
+            } catch (error) {
                 return formatJSONResponse({
                     message: 'Cannot found an user with your security key'
-                }, 401)
+                }, 404)
             }
 
             event.userMetadata = user as T

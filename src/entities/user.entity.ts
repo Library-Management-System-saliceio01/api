@@ -1,4 +1,3 @@
-import { UserRoles } from "@/enum";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import { UserBorrowBook } from "./user-borrow-book.entity";
 
@@ -29,7 +28,7 @@ export class User {
     @Column({ type: 'varchar' })
     password: string
 
-    @Column({ type: 'varchar', enum: [UserRoles.librarian, UserRoles.member] })
+    @Column({ type: 'varchar' })
     role: string
 
     @OneToMany(() => UserBorrowBook, userBorrowBook => userBorrowBook.user)
