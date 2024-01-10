@@ -3,14 +3,15 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 
 import { Book, User, UserBorrowBook } from "@/entities";
+import apiConfig from "@/config/api-config";
 
 export const AppDataSource = new DataSource({
-  type: "mysql",
-  host: process.env.dbhost,
-  port: 3306,
-  username: process.env.dbusername,
-  password: process.env.dbpassword,
-  database: process.env.dbschema,
+  type: apiConfig.db_config.type as any,
+  host: apiConfig.db_config.host,
+  port: +apiConfig.db_config.port,
+  username: apiConfig.db_config.username,
+  password: apiConfig.db_config.password,
+  database: apiConfig.db_config.database,
   synchronize: true,
   logging: false,
   entities: [

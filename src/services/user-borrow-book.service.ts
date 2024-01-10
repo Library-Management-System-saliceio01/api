@@ -2,6 +2,7 @@ import { Book, User, UserBorrowBook } from "@/entities";
 import { userBorrowBookRepository } from "@/utils";
 import { BookService } from "./book.service";
 import moment from "moment";
+import { LessThanOrEqual } from "typeorm";
 
 export class UserBorrowBookService {
     static userBorrowBookRepository = userBorrowBookRepository
@@ -36,5 +37,66 @@ export class UserBorrowBookService {
                 returned: false,
             }
         })
+    }
+
+    static async countUserBorrowedBooks(): Promise<number> {
+        return this.userBorrowBookRepository.count({
+            where: {
+                returned: false,
+            }
+        })
+    }
+
+    static async usersWithBooksBorrowedExpirated(): Promise<User[]> {
+        let users: User[] = []
+
+        let userBorrowBooks: UserBorrowBook[] = await this.userBorrowBookRepository.find({
+            relations: {
+                user: true,
+            },
+            where: {
+                expirationDate: LessThanOrEqual(moment().toDate()),
+                returned: false,
+            }
+        })
+
+        userBorrowBooks.forEach((userBorrowBook: UserBorrowBook) => {
+            users.push(userBorrowBook.user)
+        })
+
+        return users
+    }
+
+    static async booksBorrowedByUser(user: User): Promise<UserBorrowBook[]> {
+        let userBorrowBooks: UserBorrowBook[] = await this.userBorrowBookRepository.find({
+            relations: {
+                book: true,
+            },
+            where: {
+                returned: false,
+                user: {
+                    id: user.id,
+                }
+            }
+        })
+
+        return userBorrowBooks
+    }
+
+    static async overDueBooksByUser(user: User): Promise<UserBorrowBook[]> {
+        let userBorrowBooks: UserBorrowBook[] = await this.userBorrowBookRepository.find({
+            relations: {
+                book: true,
+            },
+            where: {
+                expirationDate: LessThanOrEqual(moment().toDate()),
+                returned: false,
+                user: {
+                    id: user.id,
+                }
+            }
+        })
+
+        return userBorrowBooks
     }
 }

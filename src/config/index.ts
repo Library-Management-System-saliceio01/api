@@ -1,1 +1,1 @@
-export * from "./jwt.config"
+export * from "./api-config"

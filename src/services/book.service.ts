@@ -1,5 +1,6 @@
 import { Book } from "@/entities";
 import { bookRepository } from "@/utils";
+import moment from "moment";
 import { DeleteResult, FindManyOptions, Like } from "typeorm";
 
 export class BookService {
@@ -78,5 +79,20 @@ export class BookService {
             data: await this.bookRepository.find(findOptions),
             totalCount: await this.bookRepository.count()
         }
+    }
+
+    static async countBooks(): Promise<number> {
+        return await this.bookRepository.count()
+    }
+
+    static async booksBorrowedExpiratedToday(): Promise<Book[]> {
+        return this.bookRepository.find({
+            where: {
+                userBorrowBook: {
+                    expirationDate: Like(moment().toDate()),
+                    returned: false,
+                }
+            }
+        })
     }
 }

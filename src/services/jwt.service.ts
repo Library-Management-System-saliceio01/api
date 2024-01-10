@@ -1,7 +1,7 @@
 import * as jwt from "jsonwebtoken";
 
 import { IJwtPayload } from "@/interface";
-import jwtConfig from "@/config/jwt.config";
+import jwtConfig from "@/config/api-config";
 
 export class JwtService {
     private userData: IJwtPayload

@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-import jwtConfig from "../config/jwt.config";
+import jwtConfig from "../config/api-config";
 import { ILambdaEvent } from "@/interface/lambda-event.interface";
 import middy from "@middy/core";
 import { APIGatewayProxyResult } from "aws-lambda";
