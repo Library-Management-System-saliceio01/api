@@ -2,6 +2,7 @@ import { User } from "@/entities";
 import { IFormatResponse, ILambdaEvent } from "@/interface";
 import { BookService } from "@/services";
 import { formatJSONResponse } from "@/utils";
+import moment from "moment";
 
 const request = async (event: ILambdaEvent<User>): Promise<IFormatResponse> => {
     const { title, author, genre, page, size } = event.queryStringParameters
@@ -16,7 +17,13 @@ const request = async (event: ILambdaEvent<User>): Promise<IFormatResponse> => {
         })
 
         return formatJSONResponse({
-            data: books.data,
+            data: books.data.map((result) => {
+                return {
+                    ...result,
+                    createdAt: moment(result.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+                    updatedAt: moment(result.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+                }
+            }),
             totalCount: books.totalCount,
         })
     } catch (error) {

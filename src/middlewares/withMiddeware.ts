@@ -10,13 +10,13 @@ async function withMiddleware<T>(configuration: IRouteGateway<T>[], event: ILamb
 
     if (!selectedHandler) {
         return formatJSONResponse({
-            message: 'Route not found'
+            error: 'Route not found'
         }, 400)
     }
 
     if (selectedHandler.roles) {
         if (!validateRolesMiddleware(event, selectedHandler.roles)) return formatJSONResponse({
-            message: 'User is not authorized'
+            error: 'User is not authorized'
         }, 401)
     }
 
@@ -25,7 +25,7 @@ async function withMiddleware<T>(configuration: IRouteGateway<T>[], event: ILamb
     }
 
     return formatJSONResponse({
-        message: 'Router error'
+        error: 'Router error'
     }, 400)
 }
 

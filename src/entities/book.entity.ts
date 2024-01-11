@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, FindOperator, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, FindOperator, JoinTable, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import { UserBorrowBook } from "./user-borrow-book.entity";
 
 @Entity()
+@Unique(['title'])
 export class Book {
     constructor(
         title: string,
@@ -38,7 +39,10 @@ export class Book {
     @Column({ type: 'boolean', default: false })
     isBorrowed?: boolean
 
-    @OneToMany(() => UserBorrowBook, userBorrowBook => userBorrowBook.book)
+    @OneToMany(() => UserBorrowBook, userBorrowBook => userBorrowBook.book, {
+        onDelete: 'CASCADE',
+    })
+    @JoinTable()
     userBorrowBook: UserBorrowBook[]
 
     @CreateDateColumn({ type: 'datetime' })

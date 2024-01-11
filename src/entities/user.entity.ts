@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import { UserBorrowBook } from "./user-borrow-book.entity";
 
 @Entity()
@@ -31,7 +31,10 @@ export class User {
     @Column({ type: 'varchar' })
     role: string
 
-    @OneToMany(() => UserBorrowBook, userBorrowBook => userBorrowBook.user)
+    @OneToMany(() => UserBorrowBook, userBorrowBook => userBorrowBook.user, {
+        onDelete: 'CASCADE',
+    })
+    @JoinTable()
     userBorrowBook: UserBorrowBook[]
 
     @CreateDateColumn({ type: 'datetime' })
